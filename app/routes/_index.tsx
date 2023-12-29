@@ -13,6 +13,11 @@ export default function Index() {
       <h1>Music Mingle</h1>
       <ul>
         <li>
+          <a href="/synth">
+            Quick Play
+          </a>
+        </li>
+        <li>
           <a
             href="#"
             rel="noreferrer">
