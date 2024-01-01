@@ -1,33 +1,27 @@
-import type { MetaFunction } from "@remix-run/node";
+import type { MetaFunction } from '@remix-run/node';
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "Music Mingle" },
-    { name: "description", content: "Music with friends" },
+    { title: 'Music Mingle' },
+    { name: 'description', content: 'Music with friends' },
   ];
 };
 
 export default function Index() {
   return (
-    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
+    <div style={{ fontFamily: 'system-ui, sans-serif', lineHeight: '1.8' }}>
       <h1>Music Mingle</h1>
       <ul>
         <li>
-          <a href="/synth">
-            Quick Play
-          </a>
+          <a href="/synth">Quick Play</a>
         </li>
         <li>
-          <a
-            href="#"
-            rel="noreferrer">
+          <a href="#" rel="noreferrer">
             Create Project
           </a>
         </li>
         <li>
-          <a
-            href="#"
-            rel="noreferrer">
+          <a href="#" rel="noreferrer">
             Browse Projects
           </a>
         </li>

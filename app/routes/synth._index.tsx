@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState } from 'react';
+import { ClientOnly } from '~/components/ClientOnly';
+import { Synth } from '~/components/Synth';
 
 enum SynthParameterType {
   FREQUENCY,
@@ -12,7 +14,7 @@ export default function DefaultSynth() {
   const [filterCutoff, setFilterCutoff] = useState(20000);
   const [gain, setGain] = useState(0.5);
 
-  const playButtonLabel = isPlaying ? "Stop" : "Play";
+  const playButtonLabel = isPlaying ? 'Stop' : 'Play';
 
   function togglePlaying() {
     setIsPlaying(!isPlaying);
@@ -87,6 +89,14 @@ export default function DefaultSynth() {
         filterCutoff={filterCutoff}
         gain={gain}
       />
+      <ClientOnly>
+        <Synth
+          isPlaying={isPlaying}
+          frequency={frequency}
+          filterCutoff={filterCutoff}
+          gain={gain}
+        />
+      </ClientOnly>
     </>
   );
 }
@@ -98,8 +108,8 @@ function DefaultSynthDebugger({
   isPlaying,
 }: any) {
   return (
-    <pre style={{ border: "1px solid gray", margin: "5px", padding: "10px" }}>
-      {isPlaying ? "Playing" : "Stopped"}
+    <pre style={{ border: '1px solid gray', margin: '5px', padding: '10px' }}>
+      {isPlaying ? 'Playing' : 'Stopped'}
       <br />
       Frequency: {frequency}
       <br />
