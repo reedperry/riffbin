@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ClientOnly } from '~/components/ClientOnly';
 import { Synth } from '~/components/Synth';
+import * as Tone from 'tone';
 
 enum SynthParameterType {
   FREQUENCY,
@@ -11,13 +12,21 @@ enum SynthParameterType {
 export default function DefaultSynth() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [frequency, setFrequency] = useState(440);
-  const [filterCutoff, setFilterCutoff] = useState(20000);
+  const [filterCutoff, setFilterCutoff] = useState(2500);
   const [gain, setGain] = useState(0.5);
+  const [canPlayAudio, setCanPlayAudio] = useState(false);
 
   const playButtonLabel = isPlaying ? 'Stop' : 'Play';
 
   function togglePlaying() {
-    setIsPlaying(!isPlaying);
+    if (!canPlayAudio) {
+      Tone.start().then(() => {
+        setCanPlayAudio(true);
+        setIsPlaying(true);
+      })
+    } else {
+      setIsPlaying(!isPlaying);
+    }
   }
 
   function handleParamChange(
@@ -49,7 +58,8 @@ export default function DefaultSynth() {
             type="range"
             id="frequency"
             min="16"
-            max="20000"
+            max="3500"
+            value={frequency}
             onChange={(evt) =>
               handleParamChange(SynthParameterType.FREQUENCY, evt)
             }
@@ -61,7 +71,8 @@ export default function DefaultSynth() {
             type="range"
             id="filter-cutoff"
             min="16"
-            max="20000"
+            max="3500"
+            value={filterCutoff}
             onChange={(evt) =>
               handleParamChange(SynthParameterType.FILTER_CUTOFF, evt)
             }
@@ -75,6 +86,7 @@ export default function DefaultSynth() {
             min="0"
             max="1.0"
             step="0.01"
+            value={gain}
             onChange={(evt) => handleParamChange(SynthParameterType.GAIN, evt)}
           />
           <label htmlFor="gain">Gain</label>

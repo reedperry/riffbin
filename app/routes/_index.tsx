@@ -16,6 +16,9 @@ export default function Index() {
           <a href="/synth">Quick Play</a>
         </li>
         <li>
+          <a href="/sequence">Sequencer</a>
+        </li>
+        <li>
           <a href="#" rel="noreferrer">
             Create Project
           </a>
