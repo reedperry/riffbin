@@ -3,18 +3,23 @@ import * as Tone from 'tone';
 
 export type SequenceProps = {
   startTime: Tone.Unit.Time;
-  notes?: ([]|string)[];
+  division?: Tone.Unit.Time;
+  notes?: (string[]|string)[];
 }
 
+export const defaultDivision: Tone.Unit.Time = '8n';
+
 export function useSequence(props: SequenceProps): void {
+  const division = props.division || defaultDivision;
   const reverb = useRef(new Tone.Reverb(0.1).toDestination());
   const synth = useRef(new Tone.Synth().connect(reverb.current));
   const seq = useRef(
     new Tone.Sequence(
       (time, note) => {
-        synth.current.triggerAttackRelease(note, '8n', time);
+        synth.current.triggerAttackRelease(note, division, time);
       },
-      props.notes || ['C4', ['E4', 'D4', 'E4'], 'G4', ['A4', 'G4']]
+      props.notes || ['C4', ['E4', 'D4', 'E4'], 'G4', ['A4', 'G4']],
+      division
     )
   );
   seq.current.start(props.startTime);

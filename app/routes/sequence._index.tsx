@@ -2,12 +2,18 @@ import { useState } from 'react';
 import { ClientOnly } from '~/components/ClientOnly';
 import * as Tone from 'tone';
 import { Sequence } from '~/components/Sequence';
+import { LinksFunction } from '@remix-run/node';
 
-export default function Sequencer() {
+import styles from '~/styles/sequencer.css';
+import { SequenceEditor } from '~/components/SequenceEditor';
+
+export const links: LinksFunction = () => [{ rel: 'stylesheet', href: styles }];
+
+export default function SequencerPage() {
   const [canPlayAudio, setCanPlayAudio] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [bpm, setBpm] = useState(120);
-  const [division, setDivision] = useState('4n');
+  const [division, setDivision] = useState('8n');
   const [sequence, setSequence] = useState([]);
 
   const playButtonLabel = isPlaying ? 'Stop' : 'Play';
@@ -50,6 +56,7 @@ export default function Sequencer() {
       <button type="button" onClick={togglePlaying}>
         {playButtonLabel}
       </button>
+      <SequenceEditor events={['Ab4', 'C4', '', 'D4', 'E3', 'Ab3', '', 'Bb3', '']} />
       <ClientOnly>
         <Sequence startTime={0} />
         <Sequence startTime={'8n'} />

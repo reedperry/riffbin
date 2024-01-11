@@ -9,7 +9,7 @@ enum SynthParameterType {
   GAIN,
 }
 
-export default function DefaultSynth() {
+export default function DefaultSynthPage() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [frequency, setFrequency] = useState(440);
   const [filterCutoff, setFilterCutoff] = useState(2500);

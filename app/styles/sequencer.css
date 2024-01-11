@@ -1,0 +1,22 @@
+:root {
+  --shadow-gray: #808080;
+}
+
+.sequencer-container {
+  display: grid;
+  gap: 10px;
+}
+
+.sequencer-step {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 75px;
+    height: 75px;
+    border-radius: 10%;
+    box-shadow: 2px 2px 2px 2px var(--shadow-gray);
+}
+
+.sequencer-step:hover {
+    box-shadow: 1px 1px 1px 1px var(--shadow-gray);
+}
