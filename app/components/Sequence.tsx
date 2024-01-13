@@ -1,9 +1,9 @@
 import { SequenceProps, useSequence } from '~/hooks/use-sequence';
 
 export function Sequence({
-  startTime,
+  startTime = undefined,
   notes = undefined,
 }: SequenceProps): React.ReactNode {
-  useSequence({ startTime });
+  useSequence({ startTime, notes });
   return null;
 }

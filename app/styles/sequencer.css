@@ -1,5 +1,6 @@
 :root {
   --shadow-gray: #808080;
+  --light-sea-green: #d0ffee;
 }
 
 .sequencer-container {
@@ -15,6 +16,10 @@
     height: 75px;
     border-radius: 10%;
     box-shadow: 2px 2px 2px 2px var(--shadow-gray);
+}
+
+.sequencer-step.active {
+  background-color: var(--light-sea-green);
 }
 
 .sequencer-step:hover {
