@@ -4,7 +4,7 @@ import * as Tone from 'tone';
 export type SequenceProps = {
   startTime?: Tone.Unit.Time;
   division?: Tone.Unit.Time;
-  notes?: (string[]|string)[];
+  notes: (string[]|string)[];
 }
 
 export const defaultDivision: Tone.Unit.Time = '8n';
@@ -21,7 +21,7 @@ export function useSequence(props: SequenceProps): void {
           synth.current.triggerAttackRelease(note, division, time);
         }
       },
-      props.notes || ['C4', ['E4', 'D4', 'E4'], 'G4', ['A4', 'G4']],
+      props.notes,
       division
     )
   );

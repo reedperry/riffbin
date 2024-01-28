@@ -5,7 +5,7 @@ import { Sequence } from '~/components/Sequence';
 import { LinksFunction } from '@remix-run/node';
 
 import styles from '~/styles/sequencer.css';
-import { SequenceEditor } from '~/components/SequenceEditor';
+import { SequenceEditor, SequenceEvent } from '~/components/SequenceEditor';
 
 export const links: LinksFunction = () => [{ rel: 'stylesheet', href: styles }];
 
@@ -15,7 +15,16 @@ export default function SequencerPage() {
   const [sequenceLength, setSequenceLength] = useState(8);
   const [bpm, setBpm] = useState(120);
   const [division, setDivision] = useState('8n');
-  const [sequence, setSequence] = useState([]);
+  const [sequence, setSequence] = useState([
+    'Ab4',
+    'C4',
+    '',
+    ['D4', 'E3'],
+    'Ab3',
+    '',
+    'Bb3',
+    '',
+  ]);
 
   const playButtonLabel = isPlaying ? 'Stop' : 'Play';
 
@@ -40,8 +49,14 @@ export default function SequencerPage() {
     Tone.Transport.bpm.rampTo(evt.currentTarget.valueAsNumber, 1);
   }
 
-  function handleSequenceLengthChange(evt: React.ChangeEvent<HTMLInputElement>): void {
+  function handleSequenceLengthChange(
+    evt: React.ChangeEvent<HTMLInputElement>
+  ): void {
     setSequenceLength(evt.currentTarget.valueAsNumber);
+  }
+
+  function handleSequenceChanged(newSequence: SequenceEvent[]): void {
+    setSequence(newSequence);
   }
 
   return (
@@ -61,9 +76,19 @@ export default function SequencerPage() {
       <button type="button" onClick={togglePlaying}>
         {playButtonLabel}
       </button>
-      <input min="1" max="64" step="1" type="number" onChange={handleSequenceLengthChange} />
+      <input
+        min="1"
+        max="64"
+        step="1"
+        type="number"
+        onChange={handleSequenceLengthChange}
+      />
       <label>Sequence Length</label>
-      <SequenceEditor length={sequenceLength} events={['Ab4', 'C4', '', ['D4', 'E3'], 'Ab3', '', 'Bb3', '']} />
+      <SequenceEditor
+        length={sequenceLength}
+        onSequenceChanged={handleSequenceChanged}
+        steps={sequence}
+      />
     </>
   );
 }
