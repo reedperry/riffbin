@@ -34,6 +34,9 @@
 }
 
 .note-strip .note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 75px;
   margin: 0;
   scroll-snap-align: center;
