@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ClientOnly } from './ClientOnly';
 import { Sequence } from './Sequence';
 import { allNotes } from '~/data/notes';
 
-export type SequenceEvent = string[] | string;
+export type SequenceEvent = string;
 
 export type SequenceEditorProps = {
   length?: number;
@@ -19,11 +19,7 @@ export function SequenceEditor({
   const eventList = new Array(length).fill(null);
   const gridColumnsStyle = `repeat(${length}, 75px)`;
 
-  function handleStepChanged(
-    stepIndex: number,
-    note: string,
-    divisionIndex?: number
-  ) {
+  function handleStepChanged(stepIndex: number, note: string) {
     const updatedSteps = [
       ...steps.slice(0, stepIndex),
       note,
@@ -42,10 +38,8 @@ export function SequenceEditor({
     >
       {eventList.map((_, i) => (
         <SequencerStep
-          notes={steps[i] || ''}
-          onStepChanged={(newNote, divisionIndex) =>
-            handleStepChanged(i, newNote, divisionIndex)
-          }
+          note={steps[i] || ''}
+          onStepChanged={(newNote) => handleStepChanged(i, newNote)}
           key={i}
         ></SequencerStep>
       ))}
@@ -57,9 +51,9 @@ export function SequenceEditor({
 }
 
 type SequencerStepProps = {
-  notes: SequenceEvent;
+  note: SequenceEvent;
   // TODO Need type for values in `allNotes`
-  onStepChanged: (newNote: string, divisionIndex?: number) => void;
+  onStepChanged: (newNote: string) => void;
 };
 
 function SequencerStep(props: SequencerStepProps): React.ReactNode {
@@ -68,29 +62,73 @@ function SequencerStep(props: SequencerStepProps): React.ReactNode {
   }
 
   let className = 'sequencer-step';
-  if (props.notes) {
+  if (props.note) {
     className += ' active';
   }
   return (
     <div className={className}>
-      <NoteStrip onNoteChanged={handleNoteChanged}></NoteStrip>
+      <NoteStrip
+        selectedNote={props.note}
+        onNoteChanged={handleNoteChanged}
+      ></NoteStrip>
     </div>
   );
 }
 
 type NoteStripProps = {
+  selectedNote: string;
   onNoteChanged: (newNote: string) => void;
+};
+
+function NoteStrip({
+  onNoteChanged,
+  selectedNote,
+}: NoteStripProps): React.ReactNode {
+  const noteStripRef = useRef<HTMLDivElement>(null);
+  const selectedNoteRef = useRef<HTMLParagraphElement>(null);
+  const [initComplete, setInitComplete] = useState(false);
+
+  useEffect(() => {
+    if (!noteStripRef.current || !selectedNoteRef.current) {
+      return;
+    }
+    const stripOffset = noteStripRef.current.offsetTop;
+    noteStripRef.current.scrollTo({
+      top: selectedNoteRef.current.offsetTop - stripOffset || 0,
+      behavior: 'instant',
+    });
+    setInitComplete(true);
+  }, []);
+
+  return (
+    <div
+      onScroll={(e) =>
+        initComplete ? handleNoteScroll(e, onNoteChanged) : null
+      }
+      className="note-strip"
+      ref={noteStripRef}
+    >
+      <p className="note">{'[rest]'}</p>
+      {allNotes.map((note) => (
+        <p
+          key={note}
+          className="note"
+          ref={note === selectedNote ? selectedNoteRef : null}
+        >
+          {note}
+        </p>
+      ))}
+    </div>
+  );
 }
 
-function NoteStrip({onNoteChanged}: NoteStripProps): React.ReactNode {
-  return <div onScroll={e => handleNoteScroll(e, onNoteChanged)} className="note-strip">{allNotes.map(note =>
-    <p key={note} className="note">{note}</p>
-  )}</div>
-}
-
-function handleNoteScroll(evt: React.UIEvent<HTMLDivElement>, onNoteChanged: (newNote: string) => void): void {
+function handleNoteScroll(
+  evt: React.UIEvent<HTMLDivElement>,
+  onNoteChanged: (newNote: string) => void
+): void {
   const scrollTop = evt.currentTarget.scrollTop;
   if (scrollTop % 75 === 0) {
-    onNoteChanged(allNotes[scrollTop / 75]);
+    const noteIndex = scrollTop / 75 - 1;
+    onNoteChanged(allNotes[noteIndex] || '');
   }
 }

@@ -1,4 +1,4 @@
-import { SequenceProps, useSequence } from '~/hooks/use-sequence';
+import { SequenceProps, useSequence } from "~/hooks/use-sequence";
 
 export function Sequence({
   startTime = undefined,
