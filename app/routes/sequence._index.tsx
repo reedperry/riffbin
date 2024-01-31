@@ -1,7 +1,5 @@
 import { useState } from 'react';
-import { ClientOnly } from '~/components/ClientOnly';
 import * as Tone from 'tone';
-import { Sequence } from '~/components/Sequence';
 import { LinksFunction } from '@remix-run/node';
 
 import styles from '~/styles/sequencer.css';
@@ -16,13 +14,13 @@ export default function SequencerPage() {
   const [bpm, setBpm] = useState(120);
   const [division, setDivision] = useState('8n');
   const [sequence, setSequence] = useState([
-    'Ab4',
-    'C4',
+    'G#4',
+    'B-2',
     '',
-    ['D4', 'E3'],
-    'Ab3',
+    'E3',
+    'G#3',
     '',
-    'Bb3',
+    'A#3',
     '',
   ]);
 

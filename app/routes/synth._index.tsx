@@ -23,7 +23,7 @@ export default function DefaultSynthPage() {
       Tone.start().then(() => {
         setCanPlayAudio(true);
         setIsPlaying(true);
-      })
+      });
     } else {
       setIsPlaying(!isPlaying);
     }
