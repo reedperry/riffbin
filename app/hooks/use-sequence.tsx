@@ -23,12 +23,10 @@ export function useSequence(props: SequenceProps): void {
       },
       props.notes,
       division
-    )
+    ).start(startTime)
   );
 
   useEffect(() => {
     seq.current.events = props.notes;
   }, [props.notes]);
-
-  seq.current.start(startTime);
 }
