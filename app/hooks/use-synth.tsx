@@ -43,6 +43,6 @@ export function useSynth({
   }, [gain]);
 
   useEffect(() => {
-    oscillator.current.frequency.rampTo(frequency, 0.1);
+    oscillator.current.frequency.setValueAtTime(frequency, now);
   }, [frequency]);
 }

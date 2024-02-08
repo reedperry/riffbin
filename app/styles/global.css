@@ -1,0 +1,19 @@
+:root {
+  --background-dark: #223434;
+  --primary-text-light: #cccccc;
+}
+
+body {
+    background-color: var(--background-dark);
+    color: var(--primary-text-light);
+}
+
+a {
+    color: var(--primary-text-light);
+    text-decoration: none;
+    font-size: 1.2rem;
+}
+
+ul {
+    list-style-type: none;
+}

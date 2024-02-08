@@ -2,12 +2,16 @@ import { useState } from 'react';
 import { ClientOnly } from '~/components/ClientOnly';
 import { Synth } from '~/components/Synth';
 import * as Tone from 'tone';
+import styles from '~/styles/global.css';
+import { LinksFunction } from '@remix-run/node';
 
 enum SynthParameterType {
   FREQUENCY,
   FILTER_CUTOFF,
   GAIN,
 }
+
+export const links: LinksFunction = () => [{ rel: 'stylesheet', href: styles }];
 
 export default function DefaultSynthPage() {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -58,7 +62,7 @@ export default function DefaultSynthPage() {
             type="range"
             id="frequency"
             min="16"
-            max="3500"
+            max="3000"
             value={frequency}
             onChange={(evt) =>
               handleParamChange(SynthParameterType.FREQUENCY, evt)
