@@ -8,6 +8,7 @@ import { LinksFunction } from '@remix-run/node';
 enum SynthParameterType {
   FREQUENCY,
   FILTER_CUTOFF,
+  FILTER_Q,
   GAIN,
 }
 
@@ -17,6 +18,7 @@ export default function DefaultSynthPage() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [frequency, setFrequency] = useState(440);
   const [filterCutoff, setFilterCutoff] = useState(2500);
+  const [filterQ, setFilterQ] = useState(4);
   const [gain, setGain] = useState(0.5);
   const [canPlayAudio, setCanPlayAudio] = useState(false);
 
@@ -44,6 +46,10 @@ export default function DefaultSynthPage() {
       }
       case SynthParameterType.FILTER_CUTOFF: {
         setFilterCutoff(evt.currentTarget.valueAsNumber);
+        break;
+      }
+      case SynthParameterType.FILTER_Q: {
+        setFilterQ(evt.currentTarget.valueAsNumber);
         break;
       }
       case SynthParameterType.GAIN: {
@@ -75,13 +81,26 @@ export default function DefaultSynthPage() {
             type="range"
             id="filter-cutoff"
             min="16"
-            max="3500"
+            max="4000"
             value={filterCutoff}
             onChange={(evt) =>
               handleParamChange(SynthParameterType.FILTER_CUTOFF, evt)
             }
           />
           <label htmlFor="filter-cutoff">Filter Cutoff (Hz)</label>
+        </div>
+        <div>
+          <input
+            type="range"
+            id="filter-q"
+            min="0"
+            max="100"
+            value={filterQ}
+            onChange={(evt) =>
+              handleParamChange(SynthParameterType.FILTER_Q, evt)
+            }
+          />
+          <label htmlFor="filter-Q">Filter Resonance</label>
         </div>
         <div>
           <input
@@ -110,6 +129,7 @@ export default function DefaultSynthPage() {
           isPlaying={isPlaying}
           frequency={frequency}
           filterCutoff={filterCutoff}
+          filterQ={filterQ}
           gain={gain}
         />
       </ClientOnly>
@@ -120,6 +140,7 @@ export default function DefaultSynthPage() {
 function DefaultSynthDebugger({
   frequency,
   filterCutoff,
+  filterQ,
   gain,
   isPlaying,
 }: any) {
@@ -130,6 +151,8 @@ function DefaultSynthDebugger({
       Frequency: {frequency}
       <br />
       Filter Cutoff: {filterCutoff}
+      <br />
+      Filter Q: {filterQ}
       <br />
       Gain: {gain}
       <br />
