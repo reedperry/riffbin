@@ -2,10 +2,14 @@ import { useState } from 'react';
 import * as Tone from 'tone';
 import { LinksFunction } from '@remix-run/node';
 
-import styles from '~/styles/sequencer.css';
+import sequencerStyles from '~/styles/sequencer.css';
+import globalStyles from '~/styles/global.css';
 import { SequenceEditor, SequenceEvent } from '~/components/SequenceEditor';
 
-export const links: LinksFunction = () => [{ rel: 'stylesheet', href: styles }];
+export const links: LinksFunction = () => [
+  { rel: 'stylesheet', href: globalStyles },
+  { rel: 'stylesheet', href: sequencerStyles },
+];
 
 export default function SequencerPage() {
   const [canPlayAudio, setCanPlayAudio] = useState(false);
@@ -15,7 +19,7 @@ export default function SequencerPage() {
   const [division, setDivision] = useState('8n');
   const [sequence, setSequence] = useState([
     'G#4',
-    'B-2',
+    'B2',
     '',
     'E3',
     'G#3',
