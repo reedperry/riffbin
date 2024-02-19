@@ -11,6 +11,8 @@ export type SequenceEditorProps = {
   onSequenceChanged: (seqeunce: SequenceEvent[]) => void;
 };
 
+const defaultSequenceNote = 'C3';
+
 export function SequenceEditor({
   length = 8,
   steps = [],
@@ -28,6 +30,34 @@ export function SequenceEditor({
     onSequenceChanged(updatedSteps);
   }
 
+  function handleStepToggled(stepIndex: number) {
+    if (steps[stepIndex]) {
+      disableStep(stepIndex);
+    } else {
+      enableStep(stepIndex);
+    }
+  }
+
+  function disableStep(stepIndex: number): void {
+    const updatedSteps = [
+      ...steps.slice(0, stepIndex),
+      '',
+      ...steps.splice(stepIndex + 1),
+    ];
+    onSequenceChanged(updatedSteps);
+  }
+
+  function enableStep(stepIndex: number): void {
+    const previousNote = stepIndex > 0 ? steps[stepIndex - 1] : null;
+    const newNote = previousNote || defaultSequenceNote;
+    const updatedSteps = [
+      ...steps.slice(0, stepIndex),
+      newNote,
+      ...steps.splice(stepIndex + 1),
+    ];
+    onSequenceChanged(updatedSteps);
+  }
+
   if (!steps.length) {
     return <div>Empty Sequence!</div>;
   }
@@ -38,9 +68,10 @@ export function SequenceEditor({
     >
       {eventList.map((_, i) => (
         <SequencerStep
+          key={i}
           note={steps[i] || ''}
           onStepChanged={(newNote) => handleStepChanged(i, newNote)}
-          key={i}
+          onStepToggled={() => handleStepToggled(i)}
         ></SequencerStep>
       ))}
       <ClientOnly>
@@ -54,8 +85,10 @@ type SequencerStepProps = {
   note: SequenceEvent;
   // TODO Need type for values in `allNotes`
   onStepChanged: (newNote: string) => void;
+  onStepToggled: () => void;
 };
 
+// TODO Should probably separate `note` from `active`
 function SequencerStep(props: SequencerStepProps): React.ReactNode {
   function handleNoteChanged(newNote: string) {
     props.onStepChanged(newNote);
@@ -66,7 +99,7 @@ function SequencerStep(props: SequencerStepProps): React.ReactNode {
     className += ' active';
   }
   return (
-    <div className={className}>
+    <div className={className} onClick={props.onStepToggled}>
       <NoteStrip
         selectedNote={props.note}
         onNoteChanged={handleNoteChanged}
@@ -80,6 +113,7 @@ type NoteStripProps = {
   onNoteChanged: (newNote: string) => void;
 };
 
+// TODO: Scroll to top on disable? Or leave not selected??
 function NoteStrip({
   onNoteChanged,
   selectedNote,
@@ -98,7 +132,7 @@ function NoteStrip({
       behavior: 'instant',
     });
     setInitComplete(true);
-  }, []);
+  }, [selectedNote]);
 
   return (
     <div
