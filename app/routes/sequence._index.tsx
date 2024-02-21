@@ -18,14 +18,14 @@ export default function SequencerPage() {
   const [bpm, setBpm] = useState(120);
   const [division, setDivision] = useState('8n');
   const [sequence, setSequence] = useState([
-    'G#4',
-    'B2',
-    '',
-    'E3',
-    'G#3',
-    '',
-    'A#3',
-    '',
+    {note: 'G#4', enabled: true },
+    {note: 'B2', enabled: true },
+    {note: '', enabled: false },
+    {note: 'E3', enabled: true },
+    {note: 'G#3', enabled: true },
+    {note: '', enabled: false },
+    {note: 'A#3', enabled: true },
+    {note: '', enabled: false },
   ]);
 
   const playButtonLabel = isPlaying ? 'Stop' : 'Play';

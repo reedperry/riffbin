@@ -1,9 +1,10 @@
 :root {
   --shadow-purple: #220077;
   --purple: #6622bb;
-  --light-purple: #cc99ff;
+  --light-purple: #dc99ff;
   --light-yellow: #fffbc7;
-  --background-dark: #223434;
+  --dark-gray: #223434;
+  --light-gray: #778989;
 }
 
 .sequencer-container {
@@ -13,22 +14,23 @@
 }
 
 .sequencer-step {
-    background-color: var(--light-purple);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 75px;
-    height: 75px;
-    border-radius: 10%;
-    box-shadow: 2px 2px 2px 2px var(--shadow-purple);
+  background-color: var(--purple);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 75px;
+  height: 75px;
+  border-radius: 8%;
+  box-shadow: 2px 2px 2px 2px var(--shadow-purple);
 }
 
-.sequencer-step.active {
-  background-color: var(--purple);
+.sequencer-step.disabled {
+  background-color: var(--light-purple);
+  color: var(--dark-gray);
 }
 
 .sequencer-step:hover {
-    box-shadow: 1px 1px 1px 1px var(--shadow-purple);
+  box-shadow: 1px 1px 1px 1px var(--shadow-purple);
 }
 
 .note-strip {
