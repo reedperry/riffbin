@@ -2,36 +2,37 @@ import { useEffect, useRef, useState } from 'react';
 import { ClientOnly } from './ClientOnly';
 import { Sequence } from './Sequence';
 import { allNotes } from '~/data/notes';
-
-export type SequenceEvent = { note: string; enabled: boolean };
+import { SequenceData, SequenceStep } from '~/models/sequence.models';
 
 export type SequenceEditorProps = {
-  length?: number;
-  steps: SequenceEvent[];
-  onSequenceChanged: (seqeunce: SequenceEvent[]) => void;
+  sequence: SequenceData;
+  onStepsChanged: (steps: SequenceStep[]) => void;
 };
 
 const defaultSequenceNote = 'C3';
+const defaultSequenceStep: SequenceStep = {
+  note: defaultSequenceNote,
+  enabled: true,
+};
 
 export function SequenceEditor({
-  length = 8,
-  steps = [],
-  onSequenceChanged,
+  sequence,
+  onStepsChanged,
 }: SequenceEditorProps): React.ReactNode {
-  const eventList = new Array(length).fill(null);
-  const gridColumnsStyle = `repeat(${length}, 75px)`;
+  const gridColumnsStyle = `repeat(${sequence.playLength}, 75px)`;
 
   function handleStepChanged(stepIndex: number, newNote: string) {
+    const currentSteps = sequence.steps;
     const updatedSteps = [
-      ...steps.slice(0, stepIndex),
-      { ...steps[stepIndex], note: newNote },
-      ...steps.splice(stepIndex + 1),
+      ...currentSteps.slice(0, stepIndex),
+      { ...currentSteps[stepIndex], note: newNote },
+      ...currentSteps.splice(stepIndex + 1),
     ];
-    onSequenceChanged(updatedSteps);
+    onStepsChanged(updatedSteps);
   }
 
   function handleStepToggled(stepIndex: number) {
-    if (steps[stepIndex].enabled) {
+    if (sequence.steps[stepIndex].enabled) {
       disableStep(stepIndex);
     } else {
       enableStep(stepIndex);
@@ -39,46 +40,55 @@ export function SequenceEditor({
   }
 
   function disableStep(stepIndex: number): void {
+    const currentSteps = sequence.steps;
     const updatedSteps = [
-      ...steps.slice(0, stepIndex),
-      { ...steps[stepIndex], enabled: false },
-      ...steps.splice(stepIndex + 1),
+      ...currentSteps.slice(0, stepIndex),
+      { ...currentSteps[stepIndex], enabled: false },
+      ...currentSteps.splice(stepIndex + 1),
     ];
-    onSequenceChanged(updatedSteps);
+    onStepsChanged(updatedSteps);
   }
 
   function enableStep(stepIndex: number): void {
-    const currentNote = steps[stepIndex].note;
-    const previousStepNote = stepIndex > 0 ? steps[stepIndex - 1].note : null;
+    const currentSteps = sequence.steps;
+    const currentNote = sequence.steps[stepIndex].note;
+    const previousStepNote =
+      stepIndex > 0 ? sequence.steps[stepIndex - 1].note : null;
     const newNote = currentNote || previousStepNote || defaultSequenceNote;
     const updatedSteps = [
-      ...steps.slice(0, stepIndex),
+      ...currentSteps.slice(0, stepIndex),
       { note: newNote, enabled: true },
-      ...steps.splice(stepIndex + 1),
+      ...currentSteps.splice(stepIndex + 1),
     ];
-    onSequenceChanged(updatedSteps);
+    onStepsChanged(updatedSteps);
   }
 
-  if (!steps.length) {
-    return <div>Empty Sequence!</div>;
+  if (sequence.steps.length === 0 || sequence.playLength === 0) {
+    return <h2>Empty Sequence!</h2>;
   }
+
+  const fullSequenceSteps = Array(sequence.playLength)
+    .fill(0)
+    .map((_, i) => sequence.steps[i] || defaultSequenceStep);
+
   return (
     <div
       className="sequencer-container"
       style={{ gridTemplateColumns: gridColumnsStyle }}
     >
-      {eventList.map((_, i) => (
+      {fullSequenceSteps.map((step, i) => (
         <SequencerStep
           key={i}
-          step={steps[i]}
+          step={step}
           onStepChanged={(newNote) => handleStepChanged(i, newNote)}
           onStepToggled={() => handleStepToggled(i)}
         ></SequencerStep>
       ))}
-      <pre>{JSON.stringify(steps)}</pre>
+      <pre>{JSON.stringify(fullSequenceSteps, null, 2)}</pre>
       <ClientOnly>
+        {/* TODO Figure out if it's easier to handle playLength with Tone.Sequence or higher level */}
         <Sequence
-          notes={steps.map((step) => (step.enabled ? step.note : ''))}
+          notes={fullSequenceSteps.map((step) => (step.enabled ? step.note : ''))}
           division={'8n'}
         />
       </ClientOnly>
@@ -87,7 +97,7 @@ export function SequenceEditor({
 }
 
 type SequencerStepProps = {
-  step: SequenceEvent;
+  step: SequenceStep;
   // TODO Need type for values in `allNotes`
   onStepChanged: (newNote: string) => void;
   onStepToggled: () => void;
@@ -145,8 +155,6 @@ function NoteStrip({
       className="note-strip"
       ref={noteStripRef}
     >
-      {/* TODO Get rid of rest - just use disabled */}
-      <p className="note">{'[rest]'}</p>
       {allNotes.map((note) => (
         <p
           key={note}
@@ -166,7 +174,7 @@ function handleNoteScroll(
 ): void {
   const scrollTop = evt.currentTarget.scrollTop;
   if (scrollTop % 75 === 0) {
-    const noteIndex = scrollTop / 75 - 1;
+    const noteIndex = scrollTop / 75;
     onNoteChanged(allNotes[noteIndex] || '');
   }
 }

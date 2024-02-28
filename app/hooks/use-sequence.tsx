@@ -30,14 +30,16 @@ export function useSequence(props: SequenceProps): void {
       props.notes,
       division
     ).start(startTime);
+    sequence.current.debug = true;
   }
 
   useEffect(() => {
+    sequence.current.cancel();
+    sequence.current.clear();
     sequence.current.events = props.notes;
 
     return () => {
-      sequence.current.cancel();
-      sequence.current.clear();
+      sequence.current.dispose();
     };
   }, [props.notes]);
 }
