@@ -3,6 +3,10 @@
   --primary-text-light: #cccccc;
 }
 
+html {
+    font-size: 16px;
+}
+
 body {
     background-color: var(--background-dark);
     color: var(--primary-text-light);
