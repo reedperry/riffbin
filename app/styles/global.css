@@ -10,6 +10,17 @@ html {
 body {
     background-color: var(--background-dark);
     color: var(--primary-text-light);
+    font-family: sans-serif;
+}
+
+input,
+button {
+    font-size: 1rem;
+}
+
+button {
+    padding: 0.5rem;
+    border-radius: 5%;
 }
 
 a {

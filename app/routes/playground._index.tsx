@@ -1,5 +1,10 @@
 import { ClientOnly } from "~/components/ClientOnly";
 import ToneDebugger from "~/components/ToneDebugger";
+import globalStyles from '~/styles/global.css';
+
+export const links: LinksFunction = () => [
+  { rel: 'stylesheet', href: globalStyles },
+];
 
 export default function TonePlaygroundPage() {
   return (

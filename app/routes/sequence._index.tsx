@@ -16,22 +16,21 @@ export default function SequencerPage() {
   const [canPlayAudio, setCanPlayAudio] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [bpm, setBpm] = useState(120);
-  const [division, setDivision] = useState('8n');
   const [sequence, setSequence] = useState<SequenceData>({
     playLength: 8,
     steps: [
       { note: 'G#4', enabled: true },
-      { note: 'B2', enabled: true },
-      { note: 'C3', enabled: false },
-      { note: 'E3', enabled: true },
-      { note: 'G#3', enabled: true },
+      { note: 'F4', enabled: true },
+      { note: 'C4', enabled: true },
       { note: 'D#3', enabled: true },
+      { note: 'G#3', enabled: true },
+      { note: 'C3', enabled: true },
       { note: 'A#3', enabled: true },
-      { note: 'A#2', enabled: false },
+      { note: 'C4', enabled: false },
     ],
   });
 
-  const playButtonLabel = isPlaying ? 'Stop' : 'Play';
+  const playButtonLabel = isPlaying ? 'Stop ⏹' : 'Play ▶️';
 
   function togglePlaying() {
     if (!canPlayAudio) {
@@ -77,33 +76,27 @@ export default function SequencerPage() {
   return (
     <>
       <h2>Sequence</h2>
-      <fieldset>
-        <input
-          type="range"
-          id="tempo"
-          value={bpm}
-          min="20"
-          max="220"
-          onChange={handleTempoChange}
-        />
-        <label htmlFor="tempo">Tempo (BPM): {bpm}</label>
-      </fieldset>
-      <fieldset>
-        <div>
-          <button type="button" onClick={togglePlaying}>
-            {playButtonLabel}
-          </button>
-        </div>
-        <input
-          min="1"
-          max="32"
-          step="1"
-          type="number"
-          value={sequence.playLength}
-          onChange={handleSequenceLengthChange}
-        />
-        <label>Sequence Length</label>
-      </fieldset>
+      <button id="sequencer-play" type="button" onClick={togglePlaying}>
+        {playButtonLabel}
+      </button>
+      <input
+        type="range"
+        id="sequencer-tempo"
+        value={bpm}
+        min="10"
+        max="240"
+        onChange={handleTempoChange}
+      />
+      <label htmlFor="sequencer-tempo">Tempo (BPM): {bpm}</label>
+      <input
+        min="1"
+        max="32"
+        step="1"
+        type="number"
+        value={sequence.playLength}
+        onChange={handleSequenceLengthChange}
+      />
+      <label>Sequence Length</label>
       <SequenceEditor
         onStepsChanged={handleSequenceStepsChanged}
         sequence={sequence}

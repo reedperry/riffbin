@@ -13,6 +13,11 @@
   margin: 1rem;
 }
 
+#sequencer-play,
+label {
+  margin: 1rem;
+}
+
 .sequencer-step {
   background-color: var(--purple);
   display: flex;
@@ -25,7 +30,7 @@
 }
 
 .sequencer-step.disabled {
-  background-color: var(--light-purple);
+  background-color: var(--light-gray);
   color: var(--dark-gray);
 }
 
