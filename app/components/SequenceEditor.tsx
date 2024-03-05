@@ -84,9 +84,8 @@ export function SequenceEditor({
           onStepToggled={() => handleStepToggled(i)}
         ></SequencerStep>
       ))}
-      <pre>{JSON.stringify(fullSequenceSteps, null, 2)}</pre>
       <ClientOnly>
-        {/* TODO Figure out if it's easier to handle playLength with Tone.Sequence or higher level */}
+        {/* TODO May be better to handle playLength with Tone.Sequence? */}
         <Sequence
           notes={fullSequenceSteps.map((step) => (step.enabled ? step.note : ''))}
           division={'8n'}
@@ -98,7 +97,6 @@ export function SequenceEditor({
 
 type SequencerStepProps = {
   step: SequenceStep;
-  // TODO Need type for values in `allNotes`
   onStepChanged: (newNote: string) => void;
   onStepToggled: () => void;
 };
