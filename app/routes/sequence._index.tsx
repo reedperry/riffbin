@@ -26,7 +26,7 @@ export default function SequencerPage() {
       { note: 'G#3', enabled: true },
       { note: 'C3', enabled: true },
       { note: 'A#3', enabled: true },
-      { note: 'C4', enabled: false },
+      { note: 'F2', enabled: true },
     ],
   });
 

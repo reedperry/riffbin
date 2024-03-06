@@ -13,14 +13,24 @@ export function useSequence(props: SequenceProps): void {
   const startTime = 0;
   const reverb = useRef<Tone.Reverb | null>(null);
   const synth = useRef<Tone.Synth | null>(null);
+  const filter = useRef<Tone.Filter | null>(null);
   const sequence = useRef<Tone.Sequence | null>(null);
 
   console.log('useSequence');
 
   useEffect(() => {
-    if (reverb.current === null && synth.current === null) {
-      reverb.current = new Tone.Reverb(0.1).toDestination();
-      synth.current = new Tone.Synth().connect(reverb.current);
+    if (reverb.current === null && synth.current === null && filter.current === null) {
+      filter.current = new Tone.Filter(3500, 'lowpass');
+      reverb.current = new Tone.Reverb(0.08);
+      synth.current = new Tone.Synth({
+        envelope: {
+          attack: 0.03
+        },
+        oscillator: {
+          type: 'pwm'
+        }
+      }).chain(filter.current, reverb.current, Tone.Destination);
+      filter.current.frequency.rampTo(850, '4m');
     }
     if (sequence.current === null) {
       sequence.current = new Tone.Sequence(
@@ -39,8 +49,10 @@ export function useSequence(props: SequenceProps): void {
       sequence.current?.dispose();
       reverb.current?.dispose();
       synth.current?.dispose();
+      filter.current?.dispose();
       sequence.current = null;
       synth.current = null;
+      filter.current = null;
       reverb.current = null;
     }
   }, []);
