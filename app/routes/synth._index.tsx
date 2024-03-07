@@ -4,6 +4,7 @@ import { Synth } from '~/components/Synth';
 import * as Tone from 'tone';
 import styles from '~/styles/global.css';
 import { LinksFunction } from '@remix-run/node';
+import { OscillatorSelector } from '~/components/OscillatorSelector';
 
 enum SynthParameterType {
   FREQUENCY,
@@ -16,6 +17,7 @@ export const links: LinksFunction = () => [{ rel: 'stylesheet', href: styles }];
 
 export default function DefaultSynthPage() {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [oscillator, setOscillator] = useState('sine');
   const [frequency, setFrequency] = useState(440);
   const [filterCutoff, setFilterCutoff] = useState(2500);
   const [filterQ, setFilterQ] = useState(4);
@@ -62,6 +64,7 @@ export default function DefaultSynthPage() {
   return (
     <>
       <h2>Synthesizer</h2>
+      <OscillatorSelector value={oscillator} onChanged={setOscillator} />
       <fieldset>
         <div>
           <input
@@ -131,6 +134,7 @@ export default function DefaultSynthPage() {
           filterCutoff={filterCutoff}
           filterQ={filterQ}
           gain={gain}
+          oscillatorType={oscillator}
         />
       </ClientOnly>
     </>

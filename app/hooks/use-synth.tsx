@@ -7,6 +7,7 @@ export interface SynthProps {
   filterCutoff: number;
   filterQ: number;
   gain: number;
+  oscillatorType: Tone.ToneOscillatorType;
 }
 
 export function useSynth({
@@ -14,6 +15,7 @@ export function useSynth({
   filterCutoff,
   filterQ,
   gain,
+  oscillatorType,
   isPlaying,
 }: SynthProps): void {
   const gainNode = useRef<Tone.Gain | null>(null);
@@ -28,7 +30,7 @@ export function useSynth({
 
   const oscillator = useRef<Tone.Oscillator | null>(null);
   if (oscillator.current === null) {
-    oscillator.current = new Tone.Oscillator(frequency, 'sawtooth').chain(
+    oscillator.current = new Tone.Oscillator(frequency, oscillatorType).chain(
       filterNode.current,
       gainNode.current,
       Tone.Destination
@@ -60,4 +62,8 @@ export function useSynth({
   useEffect(() => {
     oscillator.current?.frequency.setValueAtTime(frequency, now);
   }, [frequency]);
+
+  useEffect(() => {
+    oscillator.current.type = oscillatorType;
+  }, [oscillatorType]);
 }
