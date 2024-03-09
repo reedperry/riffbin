@@ -1,6 +1,8 @@
-# Welcome to Remix!
+# Riffbin
 
-- [Remix Docs](https://remix.run/docs)
+The goal is to make Riffbin into a place to easily create or jot down melody/riff ideas with a simple sequencer view, and allow some extra controls over the synth sound parameters. Beyond that, I'd like to allow public/private storage, and live multiplayer for collaboration. Multiplayer may be more useful if the application allows playing and editing multiple sequences at once, but I also want to stay far away from building a DAW. Riffbin should be easy to open up on a mobile device and get an idea out of your head, or listen to/play with your friend's riff.
+
+Using Tone.js and Remix.
 
 ## Development
 
@@ -26,13 +28,3 @@ Then run the app in production mode:
 npm start
 ```
 
-Now you'll need to pick a host to deploy it to.
-
-### DIY
-
-If you're familiar with deploying node applications, the built-in Remix app server is production-ready.
-
-Make sure to deploy the output of `remix build`
-
-- `build/`
-- `public/build/`
