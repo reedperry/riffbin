@@ -3,8 +3,8 @@ import styles from '~/styles/global.css';
 
 export const meta: MetaFunction = () => {
   return [
-    { title: 'Riff Locker' },
-    { name: 'description', content: 'Music with friends' },
+    { title: 'Riffbin' },
+    { name: 'description', content: 'Write and share music ideas' },
   ];
 };
 
@@ -13,7 +13,7 @@ export const links: LinksFunction = () => [{ rel: 'stylesheet', href: styles }];
 export default function Index() {
   return (
     <div style={{ fontFamily: 'system-ui, sans-serif', lineHeight: '1.8' }}>
-      <h1>Riff Locker</h1>
+      <h1>Riffbin</h1>
       <ul>
         <li>
           <a href="/synth"><strong>Quick Play 🎹</strong></a>
