@@ -1,6 +1,7 @@
 :root {
   --shadow-purple: #220077;
   --purple: #6622bb;
+  --dark-purple: #601aab;
   --light-purple: #dc99ff;
   --light-yellow: #fffbc7;
   --dark-gray: #223434;
@@ -26,7 +27,7 @@ label {
   width: 75px;
   height: 75px;
   border-radius: 8%;
-  box-shadow: 2px 2px 2px 2px var(--shadow-purple);
+  box-shadow: 3px 3px 2px 2px var(--shadow-purple);
 }
 
 .sequencer-step.disabled {
@@ -35,6 +36,7 @@ label {
 }
 
 .sequencer-step:hover {
+  background-color: var(--dark-purple);
   box-shadow: 1px 1px 1px 1px var(--shadow-purple);
 }
 
