@@ -4,6 +4,8 @@ import * as Tone from 'tone';
 export type SequenceProps = {
   division?: Tone.Unit.Time;
   notes: (string[] | string)[];
+  loopStart?: number;
+  loopEnd?: number;
 };
 
 export const defaultDivision: Tone.Unit.Time = '8n';
@@ -16,8 +18,6 @@ export function useSequence(props: SequenceProps): void {
   const filter = useRef<Tone.Filter | null>(null);
   const lfo = useRef<Tone.LFO | null>(null);
   const sequence = useRef<Tone.Sequence | null>(null);
-
-  console.log('useSequence');
 
   useEffect(() => {
     if (reverb.current === null && synth.current === null && filter.current === null) {
@@ -44,7 +44,6 @@ export function useSequence(props: SequenceProps): void {
         props.notes,
         division
       ).start(startTime);
-      sequence.current.debug = true;
     }
 
     return () => {
@@ -66,4 +65,16 @@ export function useSequence(props: SequenceProps): void {
       sequence.current.events = props.notes;
     }
   }, [props.notes]);
+
+  useEffect(() => {
+    if (sequence.current && typeof props.loopStart === 'number' && props.loopStart >= 0) {
+      sequence.current.loopStart = props.loopStart;
+    }
+  }, [props.loopStart]);
+
+  useEffect(() => {
+    if (sequence.current && props.loopEnd) {
+      sequence.current.loopEnd = props.loopEnd;
+    }
+  }, [props.loopEnd]);
 }

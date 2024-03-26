@@ -19,6 +19,8 @@ export function SequenceEditor({
   sequence,
   onStepsChanged,
 }: SequenceEditorProps): React.ReactNode {
+  const [loopStart, setLoopStart] = useState<number>(0);
+  const [loopEnd, setLoopEnd] = useState<number>(sequence.steps.length);
   const gridColumnsStyle = `repeat(${sequence.playLength}, 75px)`;
 
   function handleStepChanged(stepIndex: number, newNote: string) {
@@ -63,10 +65,23 @@ export function SequenceEditor({
     onStepsChanged(updatedSteps);
   }
 
+  function handleLoopStartChange(loopStart: number): void {
+    setLoopStart(loopStart);
+  }
+
+  function handleLoopEndChange(loopEnd: number): void {
+    setLoopEnd(loopEnd);
+  }
+
+  function loopStartDragStart(): void {
+    console.log('drag started');
+  }
+
   if (sequence.steps.length === 0 || sequence.playLength === 0) {
     return <h2>Empty Sequence!</h2>;
   }
 
+  // TODO Adjust naming to fit well with loopStart/loopEnd length
   const fullSequenceSteps = Array(sequence.playLength)
     .fill(0)
     .map((_, i) => sequence.steps[i] || defaultSequenceStep);
@@ -77,22 +92,30 @@ export function SequenceEditor({
       style={{ gridTemplateColumns: gridColumnsStyle }}
     >
       {fullSequenceSteps.map((step, i) => (
-        <SequencerStep
-          key={i}
-          step={step}
-          onStepChanged={(newNote) => handleStepChanged(i, newNote)}
-          onStepToggled={() => handleStepToggled(i)}
-        ></SequencerStep>
+        <>
+          <LoopBoundaryControl dragStarted={loopStartDragStart} dragEnded={handleLoopEndChange} />
+          <SequencerStep
+            key={i}
+            step={step}
+            onStepChanged={(newNote) => handleStepChanged(i, newNote)}
+            onStepToggled={() => handleStepToggled(i)}
+          ></SequencerStep>
+        </>
       ))}
       <ClientOnly>
-        {/* TODO May be better to handle playLength with Tone.Sequence? */}
         <Sequence
           notes={fullSequenceSteps.map((step) => (step.enabled ? step.note : ''))}
+          loopStart={loopStart}
+          loopEnd={loopEnd}
           division={'8n'}
         />
       </ClientOnly>
     </div>
   );
+}
+
+function LoopBoundaryControl(props: any): React.ReactNode {
+  return <div className="loop-boundary" draggable onDragEnd={props.dragEnded}>LOOP</div>;
 }
 
 type SequencerStepProps = {
@@ -106,12 +129,20 @@ function SequencerStep(props: SequencerStepProps): React.ReactNode {
     props.onStepChanged(newNote);
   }
 
+  function handleDragEnter(): void {
+    console.log('drag enter');
+  }
+
+  function handleDragLeave(): void {
+    console.log('drag leave');
+  }
+
   let className = 'sequencer-step';
   if (!props.step.enabled) {
     className += ' disabled';
   }
   return (
-    <div className={className} onClick={props.onStepToggled}>
+    <div className={className} onClick={props.onStepToggled} onDragEnter={handleDragEnter} onDragLeave={handleDragLeave}>
       <NoteStrip
         selectedNote={props.step.note}
         onNoteChanged={handleNoteChanged}

@@ -59,6 +59,7 @@ export default function SequencerPage() {
   function togglePlaying() {
     if (!canPlayAudio) {
       Tone.start().then(() => {
+        Tone.Transport.bpm.setValueAtTime(bpm, Tone.now());
         setCanPlayAudio(true);
         setIsPlaying(true);
         Tone.Transport.start();
