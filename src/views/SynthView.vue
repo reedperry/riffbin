@@ -1,8 +1,8 @@
-<script setup>
+<script setup lang="ts">
+import { useSynth } from '@/composables/useSynth'
 import * as Tone from 'tone'
 import { ref } from 'vue'
 
-const synth = new Tone.Synth().toDestination()
 const audioEnabled = ref(false)
 
 async function enableAudio() {
@@ -14,8 +14,14 @@ async function enableAudio() {
   }
 }
 
-function playNote() {
-  synth.triggerAttackRelease('C4', '4n')
+const { isPlaying, frequency, filterCutoff, oscillatorType } = useSynth()
+
+function play(): void {
+  isPlaying.value = true
+}
+
+function stop(): void {
+  isPlaying.value = false
 }
 </script>
 
@@ -23,7 +29,14 @@ function playNote() {
   <div class="synth">
     <h1>Synth</h1>
     <button v-show="!audioEnabled" @click="enableAudio">Enable Audio</button>
-    <button v-show="audioEnabled" @click="playNote">Play Note</button>
+    <button v-show="audioEnabled" @click="play">Play</button>
+    <button v-show="audioEnabled" @click="stop">Stop</button>
+    <p>Is Playing: {{ isPlaying }}</p>
+    <p>Oscillator: {{ oscillatorType }}</p>
+    <p>Freq: {{ frequency }}</p>
+    <input type="range" min="16" max="5000" step="10" v-model="frequency" />
+    <p>Filter Cutoff: {{ filterCutoff }}</p>
+    <input type="range" min="16" max="5000" step="10" v-model="filterCutoff" />
   </div>
 </template>
 
