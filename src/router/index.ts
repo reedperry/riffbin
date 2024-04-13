@@ -15,6 +15,11 @@ const router = createRouter({
       component: () => import('../views/SynthView.vue'),
     },
     {
+      path: '/riff/create',
+      name: 'create-riff',
+      component: () => import('../views/RiffView.vue'),
+    },
+    {
       path: '/about',
       name: 'about',
       // route level code-splitting

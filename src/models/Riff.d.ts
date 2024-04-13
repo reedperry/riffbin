@@ -1,4 +1,4 @@
-import type { Cycle } from './Sequence'
+import type { Cycle } from './Cycle'
 
 export interface Track {
   id: string
