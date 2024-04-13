@@ -1,11 +1,15 @@
-import type { Sequence } from 'tone'
+import type { Cycle } from './Sequence'
 
 export interface Track {
-  sequence: Sequence
+  id: string
+  name: string
+  cycle: Cycle
   muted: boolean
 }
 
 export interface Riff {
-  tracks: Track
+  id: string
+  name: string
+  tracks: Track[]
   tempo: number
 }
