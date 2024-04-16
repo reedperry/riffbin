@@ -4,7 +4,7 @@ export type Step = {
   enabled: boolean
 }
 
-export type Cycle = {
+export type Sequence = {
   playLength: number
   steps: Step[]
 }

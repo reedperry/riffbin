@@ -1,9 +1,9 @@
-import type { Cycle } from './Cycle'
+import type { Sequence } from './Sequence'
 
 export interface Track {
   id: string
   name: string
-  cycle: Cycle
+  sequence: Sequence
   muted: boolean
 }
 
