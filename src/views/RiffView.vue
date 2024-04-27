@@ -22,10 +22,27 @@ const t: Track = ref({
   ]}
 })
 
+const t2: Track = ref({
+  id: 'track-456',
+  name: 'Bass',
+  muted: false,
+  sequence: {playLength: 8, steps: [
+    { note: 'C2', volume: 100, enabled: true },
+    { note: 'D2', volume: 60, enabled: true },
+    { note: 'E2', volume: 80, enabled: true },
+    { note: 'F2', volume: 100, enabled: false },
+    { note: 'G2', volume: 60, enabled: true },
+    { note: 'A2', volume: 80, enabled: true },
+    { note: 'B2', volume: 100, enabled: true },
+    { note: 'C2', volume: 60, enabled: true },
+    { note: 'G2', volume: 80, enabled: true },
+  ]}
+})
+
 const riff: Riff = ref({
   id: 'riff-123',
   name: 'My Riff',
-  tracks: [t],
+  tracks: [t, t2],
   tempo: 120
 });
 
@@ -50,7 +67,7 @@ async function enableAudio() {
     <p><small>Tempo: {{riff.tempo}}</small></p>
     <div class="riff-editor">
       <div class="track" v-for="track in riff.tracks">
-        <div class="track-name">{{track.value.name}}</div>
+        <div class="track-name" :title="track.value.name">{{track.value.name}}</div>
         <div class="sequence-step" v-for="step in track.value.sequence.steps">{{step.note}}</div>
       </div>
     </div>
@@ -67,17 +84,33 @@ async function enableAudio() {
 }
 
 .riff-editor {
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-flow: column nowrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 2rem;
 }
 
 .track {
+  width: 100%;
+  max-width: 1600px;
   display: flex;
   flex-flow: row nowrap;
+  justify-content: space-around;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.track-name {
+  flex-basis: 4rem;
+  flex-shrink: 0;
 }
 
 .sequence-step {
-  padding: 5px;
+  cursor: pointer;
+  padding: 5px; 
 }
 
 button {
