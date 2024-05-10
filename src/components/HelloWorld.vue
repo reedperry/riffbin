@@ -1,18 +1,15 @@
 <script setup lang="ts">
-defineProps<{
-  msg: string
-}>()
+import SequenceEvent from './NoteComponent.vue'
+import SequencerStrip from './SequencerStrip.vue'
+
+const note = 'B1'
 </script>
 
 <template>
-  <div class="greetings">
-    <h1 class="green">{{ msg }}</h1>
-    <h3>
-      You’ve successfully created a project with
-      <a href="https://vitejs.dev/" target="_blank" rel="noopener">Vite</a> +
-      <a href="https://vuejs.org/" target="_blank" rel="noopener">Vue 3</a>.
-      What's next?
-    </h3>
+  <div>
+    <h1>Sequencer</h1>
+    <SequenceEvent :note="note" :enabled="true" />
+    <SequencerStrip />
   </div>
 </template>
 
