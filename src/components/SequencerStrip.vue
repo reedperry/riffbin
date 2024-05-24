@@ -26,8 +26,8 @@ const notes = reactive(
     .map(note => note + props.octave),
 )
 
-function handleNoteActiveChange(evt: MouseEvent): void {
-  console.log('Should change note to: ', evt.currentTarget)
+function handleNoteActiveChange(note: string): void {
+  console.log('Should change note to: ', note)
 }
 </script>
 
@@ -35,8 +35,9 @@ function handleNoteActiveChange(evt: MouseEvent): void {
   <div class="sequencer-strip">
     <SequencerSlot
       v-for="note in notes"
+      :key="note"
       :note="note"
-      @activeChange="handleNoteActiveChange"
+      @activeChange="handleNoteActiveChange(note)"
     />
   </div>
 </template>

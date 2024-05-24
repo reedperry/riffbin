@@ -1,13 +1,18 @@
 <script setup lang="ts">
 const props = defineProps<{ note: string }>()
 
-function handleClick(evt: MouseEvent): void {
+const emit = defineEmits<{
+  activeChange: []
+}>()
+
+function handleClick(): void {
   console.log('SequencerSlot clicked: ', props.note)
+  emit('activeChange')
 }
 </script>
 
 <template>
-  <div class="note-slot">{{ props.note }}</div>
+  <div class="note-slot" @click="handleClick">{{ props.note }}</div>
 </template>
 
 <style scoped>

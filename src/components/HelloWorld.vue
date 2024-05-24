@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import SequenceEvent from './NoteComponent.vue'
+import SequenceSlot from './SequencerSlot.vue'
 import SequencerStrip from './SequencerStrip.vue'
 
 const note = 'B1'
@@ -8,8 +8,9 @@ const note = 'B1'
 <template>
   <div>
     <h1>Sequencer</h1>
-    <SequenceEvent :note="note" :enabled="true" />
-    <SequencerStrip />
+    <SequenceSlot :note="note" :enabled="true" />
+    <SequencerStrip :octave="3" />
+    <SequencerStrip :octave="4" />
   </div>
 </template>
 
